@@ -24,7 +24,23 @@ app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
 
+// Timestamp service - by Gergely Muka
+app.get("/api/timestamp/:date_string?", function (req, res) {
 
+  if (req.params.date_string && new Date(req.params.date_string).toUTCString() === "Invalid Date") {
+    res.json({error: new Date(req.params.date_string).toUTCString()})
+  }
+  
+  let serviceDate;
+  
+  if (!req.params.date_string) {
+    serviceDate = new Date();
+  } else {
+    serviceDate = new Date(req.params.date_string); 
+  }
+  
+  res.json({unix: serviceDate.getTime(), utc: serviceDate.toUTCString()});
+});
 
 // listen for requests :)
 var listener = app.listen(process.env.PORT, function () {
